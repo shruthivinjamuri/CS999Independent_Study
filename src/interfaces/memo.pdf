@@ -1,0 +1,14 @@
+Memo - Object Oriented Software Development Project.
+Project purpose:
+The first project mainly focuses on selecting the programming language to be used for the entire module and justifying the selection.
+Description:
+I choose the programming language JAVA for the development of the module and use eclipse IDE to code in Java.
+The selection can be justified by discussing how the constraints in the project are dealt with:
+The programming language should support modularity: Java classes, objects, packages, JAR files provide modularity.
+Language should support automatic unit testing: Java provides JUnit, a unit testing framework.
+Reading and writing XML should be supported: Java has different parsers such as - DOM parser, SAX parser, StAX parser to read and write XML.
+Language should deal with tcp/ip sockets: Client/server application programming is easier in Java. The java.net package provides flexible
+and powerful infrastructure for network programming.
+Language should support constructing GUI: Java has AWT and Swing, graphics APIs which provide huge collection of reusable GUI components.
+	In addition to handling the above constraints the jar file to the project could be deployed on Linux machines and the particular java code for the project could also
+be run on my local windows machine without any changes to the computer/OS.  
