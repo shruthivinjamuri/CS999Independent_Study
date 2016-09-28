@@ -23,7 +23,7 @@ public interface IGraph {
 	
 	// Joins two graphs that operate on the same cost interval and 
 	// disjoint sets of nodes
-	public boolean joinGraph(IGraph graph);
+	public void joinGraph(IGraph graph);
 	
 	// Returns the maximum cost allowed for the edges
 	public Double getCostInterval();
