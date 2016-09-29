@@ -6,16 +6,18 @@ import interfaces.IGraph;
 import interfaces.IGraphLibrary;
 
 public class GraphLibrary implements IGraphLibrary {
-	HashMap<String, IGraph> graphs = new HashMap<>();
+	private HashMap<String, IGraph> graphs = new HashMap<>();
+	
 	@Override
 	public void createGraph(String graphName, Double costInterval) {
-		// TODO Auto-generated method stub
-		Graph graph = new Graph(graphName, costInterval);
+		if(!graphs.containsKey(graphName)){
+		IGraph graph = new Graph(graphName, costInterval);
+		graphs.put(graphName, graph);
+		}
 	}
 
 	@Override
 	public boolean addEdge(String graphName, String from, String to, Double cost) {
-		// TODO Auto-generated method stub
 		if(!graphs.containsKey(graphName)) return false;
 		IGraph graph = graphs.get(graphName);
 		graph.addEdge(from, to, cost);
@@ -24,8 +26,9 @@ public class GraphLibrary implements IGraphLibrary {
 
 	@Override
 	public String computePath(String graph, String from, String to) {
-		// TODO Auto-generated method stub
-		return null;
+		if(!graphs.containsKey(graph)) return "<false />";
+		return graphs.get(graph).getPath(from, to);
+		
 	}
 
 }
