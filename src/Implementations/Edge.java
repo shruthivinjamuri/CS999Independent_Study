@@ -5,11 +5,11 @@ import interfaces.INode;
 
 public class Edge implements IEdge{
     
-    private Node origin;
-    private Node destination;
+    private INode origin;
+    private INode destination;
     private Double cost;
     
-    public Edge(Node origin, Node destination, Double cost){
+    public Edge(INode origin, INode destination, Double cost){
            this.origin = origin;
            this.destination = destination;
            this.cost = cost;
@@ -19,15 +19,21 @@ public class Edge implements IEdge{
            
            return this.cost.compareTo(edge.getCost());
     }
+    
+    public INode getOrigin() {
+           return origin;
+    }
 
-    public INode getTo() {
+    public void setOrigin(INode origin) {
+           this.origin = origin;
+    }
 
+    public INode getDestination() {
            return destination;
     }
 
-    public INode getFrom() {
-
-           return origin;
+    public void setDestination(INode destination) {
+           this.destination = destination;
     }
 
     public Double getCost() {
@@ -46,4 +52,3 @@ public class Edge implements IEdge{
 
 
 }
-

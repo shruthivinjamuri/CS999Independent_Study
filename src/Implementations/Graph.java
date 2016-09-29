@@ -1,6 +1,7 @@
 package Implementations;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,11 +25,17 @@ public class Graph implements IGraph {
 
 
        public IEdge addEdge(String from, String to, Double cost) {
-           Node origin = new Node(from);
-           Node destination = new Node(to);
+    	   if (cost > costInterval){ 
+    		   return null;
+    	   }
+    	   INode origin = addOrGetNode(from);
+    	   INode destination = addOrGetNode(to);
     	   IEdge edge = new Edge(origin, destination, cost);
-           edges.add(edge);  
+    	   edges.add(edge); 
+           origin.addOutEdge(edge);
+    	   
            return edge;
+           
        }
        
 //       private boolean checkTriangleEquality(Node from, Node to, int cost){
@@ -75,9 +82,54 @@ public class Graph implements IGraph {
               return this.costInterval;
        }
 
-       public IPath getPath(String from, String to) {
-              return null;
-       }
+       public String getPath(String from, String to) {
+           INode source = addOrGetNode(from);
+           INode destination = addOrGetNode(to);
+           HashMap<INode, IEdge> prev = dijkstraShortestPath(source);
+           ArrayList<IEdge> path = new ArrayList<>();
+           INode target = destination;
+           while(target != source){
+                  path.add(prev.get(target));
+                  target = prev.get(target).getOrigin();
+           }
+           StringBuilder sb = new StringBuilder();
+           sb.append("<path cost="+ destination.getMinCost()+">");
+           for(int i = path.size()-1; i>=0; i--){
+        	   sb.append(path.get(i).toString());
+           }
+           sb.append("</path>");
+           return sb.toString();
+    }
+ 
+    public HashMap<INode, IEdge> dijkstraShortestPath(INode source){
+           java.util.PriorityQueue<INode> queue = new java.util.PriorityQueue<INode>(nodes.size());
+           HashMap<INode, IEdge> prev = new HashMap<>();
+           
+           source.setMinCost(0.0);
+           
+           for(INode node: getAllNodes()){
+                  prev.put(node, null);
+                  queue.add(node);
+           }
+           
+           while(!queue.isEmpty()){
+                  INode u = queue.poll();
+                  Double alt = 0.0;
+                  for(IEdge outEdge: u.getOutEdges()){
+                        alt = u.getMinCost() + outEdge.getCost();
+                        if(alt < outEdge.getDestination().getMinCost()){
+                               outEdge.getDestination().setMinCost(alt);
+                               prev.put(outEdge.getDestination(), outEdge);
+                               if(queue.remove(outEdge.getDestination())){
+                            	   queue.add(outEdge.getDestination());
+                               }
+                        }
+                  }
+           }
+           return prev;
+           
+    }
+
 
 }
 

@@ -1,8 +1,7 @@
 package interfaces;
 
 public interface IGraphLibrary {
-	public boolean createGraph(String graphName, int costInterval); 
-	public boolean addEdge(String graphName, String from, String to, int cost);
-	public String joinGraph(String fromGraph, String toGraph);
+	public void createGraph(String graphName, Double costInterval); 
+	public boolean addEdge(String graphName, String from, String to, Double cost);
 	public String computePath(String graph, String from, String to);
 }
