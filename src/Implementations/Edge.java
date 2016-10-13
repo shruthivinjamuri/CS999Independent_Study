@@ -47,7 +47,7 @@ public class Edge implements IEdge{
     }
     
     public String toString(){
-           return String.format("<edge from=%s to=%s cost=%d /> ", origin.getLabel(), destination.getLabel(), cost);
+           return String.format("<edge from=%s to=%s cost=%.2f /> ", origin.getLabel(), destination.getLabel(), cost);
     }
 
 

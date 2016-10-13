@@ -13,11 +13,14 @@ public class Node implements INode{
        private List<IEdge> edges;
        private Double minCost;
        private boolean isVisited;
+       private int preClock;
+       private int postClock;
        
        public Node(String label){
               this.label = label;
               this.edges = new ArrayList<>();
               this.minCost = Double.MAX_VALUE;
+              this.isVisited = false;
        }
        
 
@@ -56,5 +59,25 @@ public class Node implements INode{
        public void setVisited(boolean isVisited) {
         this.isVisited = isVisited;
     }
+
+
+	public int getPreClock() {
+		return preClock;
+	}
+
+
+	public void setPreClock(int preClock) {
+		this.preClock = preClock;
+	}
+
+
+	public int getPostClock() {
+		return postClock;
+	}
+
+
+	public void setPostClock(int postClock) {
+		this.postClock = postClock;
+	}
 
 }
