@@ -23,6 +23,8 @@ import org.xml.sax.SAXException;
 
 public class XMLParser {
 	
+	private GraphLibrary library = new GraphLibrary();
+	
 	public static void main(String[] args) throws XMLStreamException {
 		XMLParser parser = new XMLParser();
 		String ans=parser.processInput("<graphProject><graph name=\"graph1\" costInterval=\"45\">"
@@ -33,11 +35,12 @@ public class XMLParser {
 				+ "</graph><path graph=\"graph1\" from=\"C\" to=\"C\" /></graphProject>");
 		System.out.println(ans);
 	}
+	
 		
 	public String processInput(String input) throws XMLStreamException{
 		XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
-		GraphLibrary library = new GraphLibrary();
 		String graphName = "";
+		String returnString = "";
 		Double costInterval = 0.0;
 		
 		// go through the input
@@ -51,7 +54,7 @@ public class XMLParser {
 				// graphTag
 				if(startElement.getName().getLocalPart().equals("graph")){
 					Attribute nameAttr = startElement.getAttributeByName(new QName("name"));
-					Attribute costAttr = startElement.getAttributeByName(new QName("cost interval"));
+					Attribute costAttr = startElement.getAttributeByName(new QName("costInterval"));
 					
 					if(nameAttr != null && costAttr != null){
 						graphName = nameAttr.getValue();
@@ -77,10 +80,14 @@ public class XMLParser {
 				else if(startElement.getName().getLocalPart().equals("path")){
 					Attribute nameAttr = startElement.getAttributeByName(new QName("graph"));
 					Attribute fromAttr = startElement.getAttributeByName(new QName("from"));
-					Attribute toAttr =startElement.getAttributeByName(new QName("to"));
+					Attribute toAttr = startElement.getAttributeByName(new QName("to"));
+					Attribute pathAlgoAttr = startElement.getAttributeByName(new QName("pathAlgo"));
+					String pathAlgo = pathAlgoAttr == null ? "" : pathAlgoAttr.getValue();
 					
 					if(nameAttr != null && fromAttr != null && toAttr != null){
-						library.computePath(nameAttr.getValue(), fromAttr.getValue(), toAttr.getValue());
+						returnString = library.computePath(
+								nameAttr.getValue(), fromAttr.getValue(), 
+								toAttr.getValue(), pathAlgo);
 					}
 				}
 			}
@@ -98,7 +105,7 @@ public class XMLParser {
 			return e.getMessage();
 		}
 		
-		return graphName;
+		return returnString;
 	}
 	
 	private static void ValidateXML(XMLInputFactory xmlInputFactory, String xml) throws XMLStreamException, SAXException, IOException{

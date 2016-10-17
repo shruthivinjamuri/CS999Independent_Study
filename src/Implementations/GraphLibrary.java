@@ -25,9 +25,9 @@ public class GraphLibrary implements IGraphLibrary {
 	}
 
 	@Override
-	public String computePath(String graph, String from, String to) {
+	public String computePath(String graph, String from, String to, String pathAlgo) {
 		if(!graphs.containsKey(graph)) return "<false />";
-		return graphs.get(graph).getPath(from, to);
+		return graphs.get(graph).getPath(from, to, pathAlgo);
 		
 	}
 

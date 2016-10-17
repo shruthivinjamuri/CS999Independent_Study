@@ -29,5 +29,5 @@ public interface IGraph {
 	public Double getCostInterval();
 	
 	// Returns a Path with cost between 'from' and 'to' nodes
-	public String getPath(String from, String to);
+	public String getPath(String from, String to, String pathAlgo);
 }
