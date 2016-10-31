@@ -1,0 +1,87 @@
+Before starting the game:
+-------------------------
+The following entities should be present -
+1. Acquire board  - 12*9 size with rows 1 - 12 and columns A - I each cell named as 1A, 10I etc.
+2. Tiles matching the names on the cells of the board.
+3. Seven colors to represent 7 different hotels.
+4. Money to buy the stocks for the hotels
+5. 1-6 players to play the game.
+
+At the start of the game:
+-------------------------
+The board should be empty (all the cells unmarked).
+Each player should have the following - 
+1. 6 Tiles(hidden from other players)
+2. $6000(money to buy hotel shares)
+3. A variable to detect his turn (boolean variable which could be false initially)
+
+Choose the order in which players play the game - It could be based on some strategy as in players ranked in the order of closeness 
+to 1A when placing the 1st tile or in a pre-decided order.
+
+Game Flow:
+----------
+When the game starts each player places on a tile on matching cell on the board and the game starts.
+At each turn player would have three actions that can be performed - 
+ 1. Purchase a stock
+ 2. Throw a dead tile - (in case player has all 6 unplayable tiles)
+ 3. End the turn
+
+During the play: 
+----------------
+When a player places a tile - 
+ 1. If the tile is adjacent(horizontal or vertical) to a single marked cell then he can pick a hotel from the existing 7 hotels.
+    If the seven hotels already exist on the board then adjacent tile move is Invalid.
+ 2. If the placed tile is adjacent to the existing hotel then it adds to that hotel.
+ 3. If the tile joins two hotels then there would be a merger. The strongest of the two hotels would be active and
+    the other hotel gets into the available hotels pool. Here if there is a tie the current active player can make a choice
+    as to which hotel should be active. 
+    While merging the hotel all the stock holders of the dissolving hotel should be given the following options -
+    a. To trade the stock
+    b. To sell the stock
+    c. To keep the stock
+    They can choose one, two or all of the options.
+  4. A hotel can't be merged if its a safe corporation - a corporation with 11 or more tiles.
+
+During the merger:
+------------------
+ 1. The players with the most and second most stockholders are the majority and the minority stockholders who get 
+    majority and minority stock bonuses as below -
+    a. Maintain a majority and minority bonus amounts chart.
+    b. If only 1 person owns the shares in the defunct corporation that person gets both the bonuses.
+    c. If there is a tie for majority stockholder, add both bonuses and divide evenly(minority stockholder gets no bonus)
+    d. If there is a tie for minority stockholder, split the minority bonus among the tied members.
+ 2. Stockholders in the surviving corporation get no bonus but their stock price grows higher as the hotel grows.
+ 
+Multiple mergers:
+-----------------
+  It is possible that one tile merges more than two hotels. The larger corporation survives.
+  Any ties would be broken by merge maker.
+  The bonuses as catered to stockholders for each defunct corporation - larger to smaller
+  
+Buying Stocks:
+--------------
+ 1. After placing the tile the player may buy the stock in any active corporation (25 stocks max for each corp.).
+ 2. He can buy upto 3 stocks in one corp. or 2 in one corp and 1 in the other or all three in different corporations or 
+    less than 3 in any combinations or not buy at all.
+ 3. Stock price depends on name of the corporation and number of tiles(maintain a chart with the rates).
+ 
+Drawing a tile:
+---------------
+ 1. Each time a player plays a tile, he draws a tile from the remaining tiles.
+ 2. In each turn, the player can discard any deadtiles(ones that merge two safe corporations).
+ 3. Tiles that form 8th corporation can't be traded in.
+ 
+Ending the game:
+----------------
+ 1. The game ends when - 
+ 	a. one player during his turn claims all active corps are safe or that 1 corp has 41 tiles.
+ 	b. A player doesn't have to end the game if he feels there is advantage in continuing playing.
+ 	c. When all the tiles are done the game ends automatically
+ 2. Majority and minority shareholders' bonuses are given out and all the stocks in active corporations are sold to the stock bank.
+ 
+ One with the maximum money wins :) :)!!!!!!!!!!!!!!! 
+
+ 
+ 
+ 
+   
