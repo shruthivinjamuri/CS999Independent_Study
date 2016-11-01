@@ -5,19 +5,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import AcquireGame.AcquireStatistics.TilePlacementType;
+
 public class Board {
 	private Cell[][] board;
 	private Set<Hotel> activeHotels;
 
 	public Board() {
-		this.board = new Cell[9][12];
+		this.board = new Cell[AcquireStatistics.rows][AcquireStatistics.columns];
 		initializeBoard();
 		activeHotels = new HashSet<Hotel>();
 	}
 
 	public void initializeBoard() {
-		for (int rowIdx = 0; rowIdx < 10; rowIdx++) {
-			for (int colIdx = 0; colIdx < 13; colIdx++) {
+		for (int rowIdx = 0; rowIdx <= AcquireStatistics.rows; rowIdx++) {
+			for (int colIdx = 0; colIdx <= AcquireStatistics.columns; colIdx++) {
 				board[rowIdx][colIdx] = new Cell(AcquireStatistics.rowMapping().get(rowIdx + 1), colIdx + 1);
 			}
 		}
@@ -77,54 +79,83 @@ public class Board {
 	public boolean isSingleTileOnBoard(Cell tile) {
 		int row = tile.getRow();
 		int col = tile.getCol();
-		if (!(board[row - 1][col].isMarked() && board[row][col - 1].isMarked() && board[row][col + 1].isMarked()
-				&& board[row + 1][col].isMarked())) {
+		if (!(board[row - 1][col].isMarked()) && !(board[row][col - 1].isMarked()) && !(board[row][col + 1].isMarked())
+				&& !(board[row + 1][col].isMarked())) {
 			return true;
 		}
 		return false;
 	}
 
-	public String placeTile(Cell tile) {
+	public TilePlacementType placeTile(Cell tile) {
+		if (isSingleton(tile)) {
+			return TilePlacementType.Singleton;
+		}
+		List<Cell> adjTiles = adjascentTiles(tile);
+		if(isGrowing(tile, adjTiles)) {
+			return TilePlacementType.Growing;
+		}
+		if(isFounding(tile, adjTiles)) {
+			return TilePlacementType.Founding;
+		}
+		if(isMerging(tile, adjTiles)) {
+			return TilePlacementType.Merging;
+		}
+		if(isImpossible(tile, adjTiles)) {
+			return TilePlacementType.Impossible;
+		}
+		return TilePlacementType.Error;
+	}
+
+	private boolean isSingleton(Cell tile) {
 		if (isSingleTileOnBoard(tile)) {
 			board[tile.getRow()][tile.getCol()].setMarked(true);
-			return "singleton";
-		} else {
-			List<Cell> adjTiles = adjascentTiles(tile);
-			if (adjTiles.size() == 1) {
-				if (activeHotels.size() < 7) {
-					for (Hotel hotel : activeHotels) {
-						if (hotel.isInHotel(adjTiles.get(0))) {
-							hotel.expandHotel(tile);
-							return "growing";
-						}
-					}
-					return "founding";
-				} else {
-					return "impossible";
-				}
-			} else {
-				for (Hotel hotel : activeHotels) {
-					int sameHotelCount = 0;
-					for (Cell adjTile : adjTiles) {
-						if (hotel.isInHotel(adjTile)) {
-							sameHotelCount++;
-						}
-					}
-					if (sameHotelCount == adjTiles.size()) {
-						hotel.expandHotel(tile);
-						return "growing";
-					}
-				}
-				for (Hotel hotel : activeHotels) {
-					if (validateDeadTile(tile, adjTiles)) {
-						tile.setDeadTile(true);
-						return "impossible";
-					}
-					return "merging";
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isGrowing(Cell tile, List<Cell> adjTiles) {
+		for (Hotel hotel : activeHotels) {
+			int sameHotelCount = 0;
+			for (Cell adjTile : adjTiles) {
+				if (hotel.isInHotel(adjTile)) {
+					sameHotelCount++;
 				}
 			}
-		}		
-		return "error";
+			if (sameHotelCount == adjTiles.size()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isMerging(Cell tile, List<Cell> adjTiles) {
+		if(!isGrowing(tile, adjTiles) && adjTiles.size() > 1) {
+			if (!validateDeadTile(tile, adjTiles)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isImpossible(Cell tile, List<Cell> adjTiles) {
+		if(isFounding(tile, adjTiles) && activeHotels.size() >= 7) {
+				return true;
+		}
+		if(validateDeadTile(tile, adjTiles)) {
+			tile.setDeadTile(true);
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isFounding(Cell tile, List<Cell> adjTiles) {
+		for (Cell adjTile : adjTiles) {
+			if(!isSingleTileOnBoard(adjTile)) {
+				return false;
+			}
+		}
+		return activeHotels.size() < 7;
 	}
 
 	private boolean validateDeadTile(Cell tile, List<Cell> adjTiles) {
@@ -148,8 +179,8 @@ public class Board {
 
 	public List<String> remainingHotels() {
 		List<String> remainingHotels = new ArrayList<String>();
-		for (String hotel: AcquireStatistics.hotels) {
-			if(!(activeHotels.contains(hotel))) {
+		for (String hotel : AcquireStatistics.hotels) {
+			if (!(activeHotels.contains(hotel))) {
 				remainingHotels.add(hotel);
 			}
 		}

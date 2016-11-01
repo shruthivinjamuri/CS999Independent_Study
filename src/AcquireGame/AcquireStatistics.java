@@ -9,6 +9,8 @@ public class AcquireStatistics {
 	public static final int sharesPerHotel = 25;
 	public static final double playerFund = 6000;
 	public static final int safeHotelSize = 11;
+	public static final int rows = 9;
+	public static final int columns = 12;
 	public static final Set<String> hotels = new HashSet<String>(Arrays.asList(
 			"Radisson", "Hilton", "Hyatt", "InterContinental", "Westin", "Sheraton", "Potawatomi"));
 	
@@ -127,5 +129,7 @@ public class AcquireStatistics {
 		
 	}
 
-
+	public static enum TilePlacementType {
+	     Growing, Merging, Singleton, Founding, Impossible, Error
+	}
 }

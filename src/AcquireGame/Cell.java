@@ -3,7 +3,6 @@ package AcquireGame;
 public class Cell {
 	private char row;
 	private int col;
-	private String name;
 	private boolean isMarked;
 	private boolean isTileAvailable;
 	private boolean isDeadTile;
@@ -11,24 +10,20 @@ public class Cell {
 	public Cell(char row, int col) {
 		this.row = row;
 		this.col = col;
-		setName(this.row, this.col);
 		this.isMarked = false;
 		this.isTileAvailable = true;
 		this.setDeadTile(false);
 	}
 
-	private void setName(char row, int col) {
+	public String getName(char row, int col) {
 		if (AcquireStatistics.isValidRow(row) && AcquireStatistics.isValidCol(col)) {
-			this.name = row +""+ col;
+			return row +""+ col;
 		}
+		return "Invalid Cell";
 	}
 
-	public boolean equals(String name) {
-		return this.name.equals(name);
-	}
-
-	public String getName() {
-		return name;
+	public boolean equals(char row, int col) {
+		return this.row == row && this.col == col;
 	}
 
 	public boolean isMarked() {
@@ -44,7 +39,7 @@ public class Cell {
 	}
 
 	public int getCol() {
-		return col;
+		return col - 1;
 	}
 
 	public boolean isTileAvailable() {

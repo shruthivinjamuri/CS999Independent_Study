@@ -1,18 +1,16 @@
 package AcquireGame;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Hotel {
 	private String hotelName;
-	private List<Cell> hotelTiles;
-	private int hotelSize;
+	private Set<Cell> hotelTiles;
 	private int sharesAvailable;
 
 	public Hotel(String hotelName) {
 		this.hotelName = hotelName;
-		this.hotelTiles = new ArrayList<Cell>();
-		getHotelSize();
+		this.hotelTiles = new HashSet<Cell>();
 		this.sharesAvailable = AcquireStatistics.sharesPerHotel;
 	}
 
@@ -31,13 +29,13 @@ public class Hotel {
 		} else if (this.sharesAvailable < numOfShares) {
 			System.out.println("Requested number of shares unavailable");
 		} else {
-			valueForShares = AcquireStatistics.singleShareValue(this.hotelName, this.hotelSize) * numOfShares;
+			valueForShares = AcquireStatistics.singleShareValue(this.hotelName, getHotelSize()) * numOfShares;
 		}
 		return valueForShares;
 	}
 	
 	public boolean isSafe() {
-		return (this.hotelSize >= 11);
+		return (this.hotelTiles.size() >= 11);
 	}
 
 	public int getSharesAvailable() {
@@ -49,18 +47,9 @@ public class Hotel {
 	}
 	
 	public boolean isInHotel(Cell tile) {
-		for(Cell hotelTile: hotelTiles) {
-			if(tile.equals(hotelTile)){
-				return true;
-			}
-		}
-		return false;
+		return hotelTiles.contains(tile);
 	}
 	
-	public void findingHotel() {
-		
-	}
-
 	public String getHotelName() {
 		return hotelName;
 	}
