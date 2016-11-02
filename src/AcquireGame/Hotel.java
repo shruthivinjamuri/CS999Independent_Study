@@ -42,8 +42,12 @@ public class Hotel {
 		return sharesAvailable;
 	}
 
-	public void setSharesAvailable(int sharesAvailable) {
-		this.sharesAvailable = sharesAvailable;
+	public void decrementSharesAvailable(int noOfShares) {
+		this.sharesAvailable-=noOfShares;
+	}
+	
+	public void incrementSharesAvailable(int noOfShares) {
+		this.sharesAvailable+=noOfShares;
 	}
 	
 	public boolean isInHotel(Cell tile) {
@@ -52,5 +56,13 @@ public class Hotel {
 	
 	public String getHotelName() {
 		return hotelName;
+	}
+
+	public Set<Cell> getHotelTiles() {
+		return hotelTiles;
+	}
+	
+	public boolean defunctHotel() {
+		return hotelTiles.removeAll(hotelTiles);
 	}
 }

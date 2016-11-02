@@ -26,9 +26,7 @@ public class Board {
 	}
 
 	public void markCell(Cell Tile) {
-		if (Tile.equals(board[Tile.getRow()][Tile.getCol()])) {
 			board[Tile.getRow()][Tile.getCol()].setMarked(true);
-		}
 	}
 
 	public Set<Hotel> getActiveHotels() {
@@ -79,11 +77,11 @@ public class Board {
 	public boolean isSingleTileOnBoard(Cell tile) {
 		int row = tile.getRow();
 		int col = tile.getCol();
-		if (!(board[row - 1][col].isMarked()) && !(board[row][col - 1].isMarked()) && !(board[row][col + 1].isMarked())
-				&& !(board[row + 1][col].isMarked())) {
-			return true;
+		if (!(board[row - 1][col].isMarked()) || !(board[row][col - 1].isMarked()) || !(board[row][col + 1].isMarked())
+				|| !(board[row + 1][col].isMarked())) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	public TilePlacementType placeTile(Cell tile) {
@@ -108,7 +106,7 @@ public class Board {
 
 	private boolean isSingleton(Cell tile) {
 		if (isSingleTileOnBoard(tile)) {
-			board[tile.getRow()][tile.getCol()].setMarked(true);
+			markCell(tile);
 			return true;
 		}
 		return false;
@@ -123,6 +121,8 @@ public class Board {
 				}
 			}
 			if (sameHotelCount == adjTiles.size()) {
+				markCell(tile);
+				hotel.expandHotel(tile);
 				return true;
 			}
 		}
@@ -159,14 +159,7 @@ public class Board {
 	}
 
 	private boolean validateDeadTile(Cell tile, List<Cell> adjTiles) {
-		Set<Hotel> hotels = new HashSet<Hotel>();
-		for (Hotel hotel : activeHotels) {
-			for (Cell adjTile : adjTiles) {
-				if (hotel.isInHotel(adjTile)) {
-					hotels.add(hotel);
-				}
-			}
-		}
+		Set<Hotel> hotels = adjacentHotels(adjTiles);
 		int safeHotelCount = 0;
 		for (Hotel hotel : hotels) {
 			if (hotel.getHotelSize() >= 11) {
@@ -175,6 +168,18 @@ public class Board {
 		}
 
 		return (safeHotelCount == hotels.size());
+	}
+	
+	public Set<Hotel> adjacentHotels(List<Cell> adjTiles) {
+		Set<Hotel> hotels = new HashSet<Hotel>();
+		for (Hotel hotel : activeHotels) {
+			for (Cell adjTile : adjTiles) {
+				if (hotel.isInHotel(adjTile)) {
+					hotels.add(hotel);
+				}
+			}
+		}
+		return hotels;
 	}
 
 	public List<String> remainingHotels() {
@@ -191,8 +196,46 @@ public class Board {
 		Hotel newHotel = new Hotel(hotelName);
 		List<Cell> adjTiles = adjascentTiles(tile);
 		newHotel.expandHotel(tile);
+		markCell(tile);
 		newHotel.expandHotel(adjTiles.get(0));
 		activeHotels.add(newHotel);
+	}
+	
+	public void mergingHotels(Hotel largestHotel, Set<Hotel> dissolvingHotels, Cell mergingTile) {
+		for(Hotel dissolvingHotel: dissolvingHotels) {
+			for(Cell tile: dissolvingHotel.getHotelTiles()) {
+				largestHotel.expandHotel(tile);
+			}
+			activeHotels.remove(dissolvingHotel);
+			dissolvingHotel.defunctHotel();
+		}
+		largestHotel.expandHotel(mergingTile);
+		
+	}
+	
+	public Set<Hotel> getDissolvingHotels(Set<Hotel> mergingHotels, Hotel largestHotel) {
+		mergingHotels.remove(largestHotel);
+		return mergingHotels;
+	}
+
+	
+	public Set<Hotel> getLargeHotel(Set<Hotel> mergingHotels) {
+		Hotel largestHotel = null;
+		Set<Hotel> largestHotels = new HashSet<Hotel>();
+		int largestHotelSize = Integer.MIN_VALUE;
+		for(Hotel hotel: mergingHotels) {
+			if(hotel.getHotelSize() >= largestHotelSize) {
+				largestHotel = hotel;
+				largestHotelSize = hotel.getHotelSize();
+			}
+		}
+		largestHotels.add(largestHotel);
+		for(Hotel hotel: mergingHotels) {
+			if(hotel.getHotelSize() == largestHotelSize) {
+				largestHotels.add(hotel);
+			}
+		}
+		return largestHotels;
 	}
 
 }

@@ -12,18 +12,15 @@ public class Cell {
 		this.col = col;
 		this.isMarked = false;
 		this.isTileAvailable = true;
-		this.setDeadTile(false);
+		this.isDeadTile = false;
 	}
 
-	public String getName(char row, int col) {
-		if (AcquireStatistics.isValidRow(row) && AcquireStatistics.isValidCol(col)) {
+	public String getName() {
 			return row +""+ col;
-		}
-		return "Invalid Cell";
 	}
 
-	public boolean equals(char row, int col) {
-		return this.row == row && this.col == col;
+	public boolean equals(Cell other) {
+		return this.getRow() == other.getRow() && this.getCol() == other.getCol();
 	}
 
 	public boolean isMarked() {
