@@ -1,7 +1,9 @@
 package AcquireGame;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -109,12 +111,19 @@ public class Game {
 				}
 			}
 		}
-		
+
 		announceWinner();
 	}
 
 	private void announceWinner() {
-		
+		Map<String, Double> finalStats = new HashMap<String, Double>();
+		for (Player player : players) {
+			Double totalCash = player.getPlayerFund();
+			for (String hotel : player.getShares().keySet()) {
+				totalCash += board.getShareValue(hotel, player.getShares().get(hotel));
+			}
+			finalStats.put(player.getPlayerName(), totalCash);
+		}
 	}
 
 	private void removeDeadTiles(Player player) {
@@ -226,14 +235,14 @@ public class Game {
 	public boolean endOfGame() {
 		Set<Hotel> activeHotels = board.getActiveHotels();
 		int safeHotelCount = 0;
-		for(Hotel activeHotel: activeHotels) {
-			if(activeHotel.getHotelSize() >= 41) {
+		for (Hotel activeHotel : activeHotels) {
+			if (activeHotel.getHotelSize() >= 41) {
 				return true;
 			}
-			if(activeHotel.isSafe()) {
+			if (activeHotel.isSafe()) {
 				safeHotelCount++;
 			}
-			if(safeHotelCount == activeHotels.size()) {
+			if (safeHotelCount == activeHotels.size()) {
 				return true;
 			}
 		}

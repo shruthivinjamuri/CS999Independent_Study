@@ -238,4 +238,13 @@ public class Board {
 		return largestHotels;
 	}
 
+	public Double getShareValue(String hotel, Integer numOfShares) {
+		for(Hotel activeHotel: activeHotels) {
+			if(activeHotel.getHotelName().equals(hotel)) {
+				return activeHotel.valueForShares(numOfShares);
+			}
+		}
+		return 0.0;
+	}
+
 }
