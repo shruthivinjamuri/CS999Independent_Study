@@ -18,8 +18,8 @@ public class Board {
 	}
 
 	public void initializeBoard() {
-		for (int rowIdx = 0; rowIdx <= AcquireStatistics.rows; rowIdx++) {
-			for (int colIdx = 0; colIdx <= AcquireStatistics.columns; colIdx++) {
+		for (int rowIdx = 0; rowIdx < AcquireStatistics.rows; rowIdx++) {
+			for (int colIdx = 0; colIdx < AcquireStatistics.columns; colIdx++) {
 				board[rowIdx][colIdx] = new Cell(AcquireStatistics.rowMapping().get(rowIdx + 1), colIdx + 1);
 			}
 		}
@@ -47,16 +47,16 @@ public class Board {
 		int row = tile.getRow();
 		int col = tile.getCol();
 		List<Cell> adjTiles = new ArrayList<Cell>();
-		if (board[row - 1][col].isMarked()) {
+		if ((row - 1 > 0) && (board[row - 1][col].isMarked())) {
 			adjTiles.add(board[row - 1][col]);
 		}
-		if (board[row][col - 1].isMarked()) {
+		if ((col - 1 > 0) && (board[row][col - 1].isMarked())) {
 			adjTiles.add(board[row][col - 1]);
 		}
-		if (board[row][col + 1].isMarked()) {
+		if ((col + 1 < AcquireStatistics.columns) && (board[row][col + 1].isMarked())) {
 			adjTiles.add(board[row][col + 1]);
 		}
-		if (board[row + 1][col].isMarked()) {
+		if ((row + 1 < AcquireStatistics.rows) && (board[row + 1][col].isMarked())) {
 			adjTiles.add(board[row + 1][col]);
 		}
 		return adjTiles;
@@ -64,8 +64,17 @@ public class Board {
 
 	public List<Cell> drawTiles(int noOfTiles) {
 		List<Cell> tiles = new ArrayList<Cell>();
-		while (tiles.size() <= noOfTiles) {
-			Cell tile = board[(int) (Math.random() % 9)][(int) (Math.random() % 12)];
+		int availableTileCount = 0;
+		for (int rowIdx = 0; rowIdx < AcquireStatistics.rows; rowIdx++) {
+			for (int colIdx = 0; colIdx < AcquireStatistics.columns; colIdx++) {
+				if(board[rowIdx][colIdx].isTileAvailable()) {
+					availableTileCount++;
+				}
+			}
+		}
+		if(noOfTiles > availableTileCount) return tiles;
+		while (tiles.size() < noOfTiles) {
+			Cell tile = board[(int) ((Math.random() * 50) % 9)][(int) ((Math.random() * 50) % 12)];
 			if (tile.isTileAvailable()) {
 				tiles.add(tile);
 				tile.setTileAvailable(false);
@@ -77,8 +86,9 @@ public class Board {
 	public boolean isSingleTileOnBoard(Cell tile) {
 		int row = tile.getRow();
 		int col = tile.getCol();
-		if (!(board[row - 1][col].isMarked()) || !(board[row][col - 1].isMarked()) || !(board[row][col + 1].isMarked())
-				|| !(board[row + 1][col].isMarked())) {
+		if (((row - 1 > 0) && (board[row - 1][col].isMarked())) || ((col - 1 > 0) && (board[row][col - 1].isMarked())) || 
+				((col + 1 < AcquireStatistics.columns) && (board[row][col + 1].isMarked()))
+				|| ((row + 1 < AcquireStatistics.rows) && (board[row + 1][col].isMarked()))) {
 			return false;
 		}
 		return true;
@@ -150,6 +160,7 @@ public class Board {
 	}
 	
 	private boolean isFounding(Cell tile, List<Cell> adjTiles) {
+		if(adjTiles.size() < 1) return false;
 		for (Cell adjTile : adjTiles) {
 			if(!isSingleTileOnBoard(adjTile)) {
 				return false;
@@ -199,6 +210,7 @@ public class Board {
 		markCell(tile);
 		newHotel.expandHotel(adjTiles.get(0));
 		activeHotels.add(newHotel);
+		System.out.println("Found hotel: " + hotelName);
 	}
 	
 	public void mergingHotels(Hotel largestHotel, Set<Hotel> dissolvingHotels, Cell mergingTile) {
@@ -241,7 +253,7 @@ public class Board {
 	public Double getShareValue(String hotel, Integer numOfShares) {
 		for(Hotel activeHotel: activeHotels) {
 			if(activeHotel.getHotelName().equals(hotel)) {
-				return activeHotel.valueForShares(numOfShares);
+				return activeHotel.totalValueOfShares(numOfShares);
 			}
 		}
 		return 0.0;

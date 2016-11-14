@@ -25,13 +25,17 @@ public class Hotel {
 	public double valueForShares(int numOfShares) {
 		double valueForShares = -1.0;
 		if (this.sharesAvailable < 1) {
-			System.out.println("No shares available for" + this.hotelName);
+			System.out.println("No shares available for " + this.hotelName);
 		} else if (this.sharesAvailable < numOfShares) {
 			System.out.println("Requested number of shares unavailable");
 		} else {
 			valueForShares = AcquireStatistics.singleShareValue(this.hotelName, getHotelSize()) * numOfShares;
 		}
 		return valueForShares;
+	}
+	
+	public double totalValueOfShares(int numOfShares) {
+		return AcquireStatistics.singleShareValue(this.hotelName, getHotelSize()) * numOfShares;
 	}
 	
 	public boolean isSafe() {

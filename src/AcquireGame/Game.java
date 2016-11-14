@@ -1,9 +1,12 @@
 package AcquireGame;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
@@ -45,42 +48,34 @@ public class Game {
 	public void startGame() {
 		while (!endOfGame()) {
 			for (Player player : players) {
+				System.out.println("Player Name: " + player.getPlayerName());
 				Cell tile = null;
 				int impossibleTileCount = -1;
 				TilePlacementType placeTile = TilePlacementType.Impossible;
+				
 				while (placeTile.equals(TilePlacementType.Impossible)) {
 					impossibleTileCount++;
 					if (impossibleTileCount >= 6) {
-						System.out.println("End of the game");
+						improperEndOfGame("impossible tiles", player.getPlayerName());
 						return;
 					}
 					tile = player.playTile();
 					placeTile = board.placeTile(tile);
 				}
+				
+				System.out.println("player " + player.getPlayerName() + " playing the tile" + tile.getName());
+				System.out.println("Tile status: " + placeTile);
+				
 				switch (placeTile) {
 				case Singleton:
 				case Growing:
 					break;
 				case Founding:
 					List<String> remainingHotels = board.remainingHotels();
-					board.findHotel(remainingHotels.get((int) (Math.random() % remainingHotels.size())), tile);
+					board.findHotel(remainingHotels.get((int) ((Math.random() * 50) % remainingHotels.size())), tile);
 					break;
 				case Merging:
-					List<Cell> adjTiles = board.adjascentTiles(tile);
-					Set<Hotel> mergingHotels = board.adjacentHotels(adjTiles);
-					Set<Hotel> largestHotels = board.getLargeHotel(mergingHotels);
-					Hotel largestHotel = null;
-					if (largestHotels.size() == 1) {
-						for (Hotel hotel : largestHotels) {
-							largestHotel = hotel;
-						}
-					} else {
-						largestHotel = player.pickRandomHotel(largestHotels);
-					}
-					Set<Hotel> dissolvingHotels = board.getDissolvingHotels(mergingHotels, largestHotel);
-					distributeBonuses(dissolvingHotels);
-					sellShares(dissolvingHotels);
-					board.mergingHotels(largestHotel, dissolvingHotels, tile);
+					handleMerging(tile, player);
 					break;
 				case Error:
 					System.out.println("Error Occured");
@@ -96,16 +91,20 @@ public class Game {
 
 				List<AfterMoveOptions> options = afterMoveOptions(player);
 				for (AfterMoveOptions option : options) {
+					System.out.println(option);
 					switch (option) {
 					case BuyShares:
 						buyShares(player);
-						continue;
+						System.out.println("Buying shares done");
+						break;
 					case RemoveDeadTiles:
 						removeDeadTiles(player);
 						assignTiles(player);
-						continue;
+						if(inadequateTiles(player.getTiles(), player)) return;
+						break;
 					case EndTurn:
 						assignTiles(player);
+						if(inadequateTiles(player.getTiles(), player)) return;
 						break;
 					}
 				}
@@ -113,6 +112,34 @@ public class Game {
 		}
 
 		announceWinner();
+	}
+
+	private boolean inadequateTiles(List<Cell> tiles, Player player) {
+		if (tiles.size() < 6) {
+			improperEndOfGame("inadequate tiles", player.getPlayerName());
+			return true;
+		}
+		 return false;
+	}
+
+	private void handleMerging(Cell tile, Player player) {
+		List<Cell> adjTiles = board.adjascentTiles(tile);
+		Set<Hotel> mergingHotels = board.adjacentHotels(adjTiles);
+		Set<Hotel> largestHotels = board.getLargeHotel(mergingHotels);
+		Hotel largestHotel = null;
+		if (largestHotels.size() == 1) {
+			for (Hotel hotel : largestHotels) {
+				largestHotel = hotel;
+			}
+		} else {
+			largestHotel = player.pickRandomHotel(largestHotels);
+		}
+		Set<Hotel> dissolvingHotels = board.getDissolvingHotels(mergingHotels, largestHotel);
+		distributeBonuses(dissolvingHotels);
+		sellShares(dissolvingHotels);
+		board.mergingHotels(largestHotel, dissolvingHotels, tile);
+		System.out.println("Merging largest hotel:" + largestHotel.getHotelName());
+		
 	}
 
 	private void announceWinner() {
@@ -124,46 +151,86 @@ public class Game {
 			}
 			finalStats.put(player.getPlayerName(), totalCash);
 		}
+
+		int i = 1;
+		
+		List<Entry<String, Double>> sortedMap = new ArrayList<Entry<String, Double>>(finalStats.entrySet());
+		Collections.sort(sortedMap, new Comparator<Entry<String, Double>>() {
+
+			@Override
+			public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
+				return o2.getValue().compareTo(o1.getValue());
+			}
+			
+		});
+//		for (String playerName : finalStats.keySet()) {
+//			System.out.println(i + ". " + playerName + " - " + finalStats.get(playerName));
+//			i++;
+//		}
+		
+		System.out.println(sortedMap);
+		System.out.println("Game ended gracefully");
 	}
 
 	private void removeDeadTiles(Player player) {
+		ArrayList<Cell> deadTiles = new ArrayList<Cell>();
 		for (Cell tile : player.getTiles()) {
 			if (tile.isDeadTile()) {
 				tile.setTileAvailable(false);
-				player.removeTile(tile);
+				deadTiles.add(tile);
 			}
+		}
+
+		for (Cell deadTile : deadTiles) {
+			player.removeTile(deadTile);
 		}
 	}
 
 	private void buyShares(Player player) {
 		int shares = AcquireStatistics.maxSharesToBuy;
-		while (shares > 0 && minFundsAvailable(player)) {
+		int turns = 3;
+		while (turns > 0 && shares > 0 && minFundsAvailable(player)) {
+			if (!(adequateSharesAvailable(shares)))
+				return;
 			Hotel hotel = player.pickRandomHotel(board.getActiveHotels());
-			int sharesInThisHotel = new Random().nextInt(shares);
+			int sharesInThisHotel = new Random().nextInt(shares) + 1;
+			System.out.println(sharesInThisHotel);
 			Double sharesValue = hotel.valueForShares(sharesInThisHotel);
 			if (player.getPlayerFund() >= sharesValue) {
 				player.decrementPlayerFund(sharesValue);
-				player.getShares().put(hotel.getHotelName(),
-						player.getShares().get(hotel.getHotelName()) + sharesInThisHotel);
+				player.getShares().put(hotel.getHotelName(), player.getShares().containsKey(hotel.getHotelName())
+						? player.getShares().get(hotel.getHotelName()) + sharesInThisHotel : sharesInThisHotel);
 				hotel.decrementSharesAvailable(sharesInThisHotel);
 				shares -= sharesInThisHotel;
 			} else {
 				System.out.println("Not enough funds with the player");
-				continue;
 			}
-
+			turns--;
 		}
 
 	}
 
+	private boolean adequateSharesAvailable(int shares) {
+		int sharesAvailable = 0;
+		for (Hotel activeHotel : board.getActiveHotels()) {
+			sharesAvailable += activeHotel.getSharesAvailable();
+		}
+		return shares <= sharesAvailable;
+	}
+
 	private boolean minFundsAvailable(Player player) {
+		if (board.getActiveHotels().size() == 0) {
+			System.out.println("No active hotels on the board yet!!");
+			return false;
+		}
+
 		Double minShareValue = Double.MAX_VALUE;
 		for (Hotel hotel : board.getActiveHotels()) {
 			if (hotel.valueForShares(1) < minShareValue) {
 				minShareValue = hotel.valueForShares(1);
 			}
 		}
-		if (player.getPlayerFund() < minShareValue) {
+		if (player.getPlayerFund() == 0 || player.getPlayerFund() < minShareValue) {
 			System.out.println("Player has not enough funds to buy even a single share");
 			return false;
 		}
@@ -247,6 +314,11 @@ public class Game {
 			}
 		}
 		return false;
+	}
+	
+	private void improperEndOfGame(String failureMsg, String playerName) {
+		System.out.println("Game ended due to " + failureMsg + " during "+playerName+"'s turn");
+		announceWinner();
 	}
 
 }
