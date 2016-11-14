@@ -99,7 +99,4 @@ public class Player {
 		}
 		return false;
 	}
-
-	// if(valueForShares > playerFunds){
-	// System.out.println("Player has no enough funds");
 }

@@ -1,6 +1,6 @@
 package AcquireGame;
 
-public class Cell {
+public class Cell implements Comparable<Cell>{
 	private char row;
 	private int col;
 	private boolean isMarked;
@@ -53,6 +53,14 @@ public class Cell {
 
 	public void setDeadTile(boolean isDeadTile) {
 		this.isDeadTile = isDeadTile;
+	}
+	
+	@Override
+	public int compareTo(Cell otherTile) {
+		if(otherTile.getRow() == this.getRow()) {
+			return this.getCol() - otherTile.getCol();
+		}
+		return this.getRow() - otherTile.getRow();
 	}
 	
 }
