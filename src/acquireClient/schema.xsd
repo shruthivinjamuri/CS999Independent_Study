@@ -1,0 +1,108 @@
+<xs:schema attributeFormDefault="unqualified"
+	elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="setup" minOccurs="0" maxOccurs="unbounded">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute type="xs:string" name="player1" use="required" />
+					<xs:attribute type="xs:string" name="player2" use="required" />
+					<xs:attribute type="xs:string" name="player3" use="required" />
+					<xs:attribute type="xs:string" name="player4" use="optional" />
+					<xs:attribute type="xs:string" name="player5" use="optional" />
+					<xs:attribute type="xs:string" name="player6" use="optional" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="start" minOccurs="0" maxOccurs="unbounded">
+	</xs:element>
+	<xs:element name="error" minOccurs="0" maxOccurs="unbounded">
+	</xs:element>
+	<xs:element name="clientState">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="player" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="tile" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:simpleContent>
+										<xs:extension base="xs:string">
+											<xs:attribute type="xs:string" name="column"
+												use="required" />
+											<xs:attribute type="xs:string" name="row" use="required" />
+										</xs:extension>
+									</xs:simpleContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:sequence>
+							<xs:element name="share" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:simpleContent>
+										<xs:extension base="xs:string">
+											<xs:attribute type="xs:string" name="name" use="required" />
+											<xs:attribute type="xs:string" name="count" use="required" />
+										</xs:extension>
+									</xs:simpleContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute type="xs:string" name="name" use="required" />
+						<xs:attribute type="xs:string" name="cash" use="required" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:element name="board" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="tile" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:string">
+										<xs:attribute type="xs:string" name="column" use="required" />
+										<xs:attribute type="xs:string" name="row" use="required" />
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:sequence>
+						<xs:element name="hotel" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:sequence>
+										<xs:element name="tile" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute type="xs:string" name="column"
+															use="required" />
+														<xs:attribute type="xs:string" name="row"
+															use="required" />
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute type="xs:string" name="name" use="required" />
+
+							</xs:complexType>
+						</xs:element>
+				</xs:complexType>
+			</xs:element>
+			<xs:sequence>
+				<xs:element name="share" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute type="xs:string" name="name" use="required" />
+								<xs:attribute type="xs:string" name="count" use="required" />
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

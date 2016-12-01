@@ -9,7 +9,7 @@ public class Play {
 		Player player1 = new Player("Shruthi");
 		Player player2 = new Player("Rakesh");
 		Player player3 = new Player("Rasher");
-		Player player4 = new Player("Renuka");
+		Player player4 = new Player("Renu");
 		ArrayList<Player> players = new ArrayList<Player>();
 		players.add(player1);
 		players.add(player2);
@@ -18,6 +18,5 @@ public class Play {
 		Game game = new Game(2, players);
 		game.startGame();
 	}
-
 
 }

@@ -258,5 +258,39 @@ public class Board {
 		}
 		return 0.0;
 	}
+	
+	public void decrementShares(int noOfShares, String hotelName) {
+		for(Hotel activeHotel: activeHotels) {
+			if(activeHotel.getHotelName().equals(hotelName)) {
+				activeHotel.decrementSharesAvailable(noOfShares);
+			}
+		}
+	}
+	
+	public String getBoardTag() {
+		String boardTag = "<board> ";
+		for (int rowIdx = 0; rowIdx < AcquireStatistics.rows; rowIdx++) {
+			for (int colIdx = 0; colIdx < AcquireStatistics.columns; colIdx++) {
+				if(board[rowIdx][colIdx].isMarked()) {
+					boardTag += board[rowIdx][colIdx].getTileTag();
+				}
+			}
+		}
+		for(Hotel activeHotel: activeHotels) {
+			boardTag += activeHotel.getHotelTag();
+		}
+		boardTag += "</board>";
+		return boardTag;
+	}
+	
+	public String getLargestHotelTag() {
+		String largestHotelTag = "";
+		Set<Hotel> largestHotels = getLargeHotel(activeHotels);
+		for(Hotel largestHotel: largestHotels) {
+			largestHotelTag += "<hotel label=" + largestHotel.getHotelName() + " />";
+		}
+		return largestHotelTag;
+		
+	}
 
 }

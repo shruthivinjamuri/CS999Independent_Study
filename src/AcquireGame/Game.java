@@ -17,7 +17,6 @@ public class Game {
 	private int noOfPlayers;
 	private List<Player> players;
 	private Board board;
-	private boolean endGame;
 
 	public Game(int noOfPlayers, ArrayList<Player> players) {
 		this.noOfPlayers = noOfPlayers;
@@ -26,7 +25,6 @@ public class Game {
 		for (Player player : players) {
 			assignTiles(player);
 		}
-		endGame = false;
 	}
 
 	public void assignTiles(Player player) {
@@ -151,8 +149,6 @@ public class Game {
 			}
 			finalStats.put(player.getPlayerName(), totalCash);
 		}
-
-		int i = 1;
 		
 		List<Entry<String, Double>> sortedMap = new ArrayList<Entry<String, Double>>(finalStats.entrySet());
 		Collections.sort(sortedMap, new Comparator<Entry<String, Double>>() {

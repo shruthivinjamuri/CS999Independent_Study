@@ -63,4 +63,9 @@ public class Cell implements Comparable<Cell>{
 		return this.getRow() - otherTile.getRow();
 	}
 	
+	public String getTileTag() {
+		return "<tile column=" + col + " row="+ row + " />";
+	}
+	
+	
 }

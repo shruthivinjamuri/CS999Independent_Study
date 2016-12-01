@@ -69,4 +69,17 @@ public class Hotel {
 	public boolean defunctHotel() {
 		return hotelTiles.removeAll(hotelTiles);
 	}
+	
+	public String getHotelTag() {
+		String hotelTag = "<hotel name=" + hotelName +">";
+		for(Cell tile: hotelTiles) {
+			hotelTag += tile.getTileTag();
+		}
+		hotelTag += "</hotel>";
+		return hotelTag;
+	}
+	
+	public String getShareTag() {
+		return "<share name=" + hotelName + "count=" + sharesAvailable + " />";
+	}
 }
