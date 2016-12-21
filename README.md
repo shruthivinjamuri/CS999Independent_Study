@@ -11,7 +11,7 @@ Implementation Details
 
 Graph Project
 --------------
-Problem Statement:
+###Problem Statement:###
 
 Design a graph library. The library must manage directed, planar graphs. The nodes are labeled. The edges of the graph are labeled with a traversal cost. They also obey the usual triangle inequality. That is, in a triangle such as the triangle inequality x + y ≥ z where x, y, and z are the costs associated with traversing these edges. The costs are real numbers may not exceed some specified cost interval. At a minimum, your library should be able to add edges to a graph, join two graphs that operate on the same cost interval and disjoint sets of nodes, and compute whether there is a path from one node to another and, if so, its cost.
 
@@ -29,17 +29,17 @@ Output is given as:
 
 Acquire Board Game
 -------------------
-Problem Statement:
+###Problem Statement:###
 
 Design an Acquire board game web service conforming to all the rules of the acquire game and object oriented concepts. Write the unit tests to test the functionalities. Write strategies to various players and test the performance of each of the player by running the game for about 50 times and seeing the pattern of game win.
 
-Design and implementation:
+###Design and implementation:###
 
 To implement acquire game I have selected Java programming language and code on eclipse IDE. I have used strategy pattern to design the strategies. Client and server XML parsers are written as StAX parsers and used ‘http://www.w3.org/2001/XMLSchema’ to validate xsd schema. 
 
 The challenging part of the acquire board game implementation is conforming to its huge list of game rules and designing the flow following all these rules. The overall rules and design flow for acquire game is as follows:
 
-Before starting the game:
+####Before starting the game:####
 
 The following entities should be present -
 *  Acquire board - 12*9 size with rows 1 - 12 and columns A - I each cell named as 1A, 10I etc.
@@ -48,7 +48,7 @@ The following entities should be present -
 4. Money to buy the stocks for the hotels
 5. 1-6 players to play the game.
 
-At the start of the game:
+####At the start of the game:####
 
 The board should be empty (all the cells unmarked).
 Each player should have the following - 
@@ -57,7 +57,7 @@ Each player should have the following -
 3. A variable to detect his turn (Boolean variable which could be false initially)
    Choose the order in which players play the game - It could be based on some strategy as in players ranked in        	the order of closeness to 1A when placing the 1st tile or in a pre-decided order.
 
-Game Flow:
+####Game Flow:####
 
 When the game starts each player places on a tile on matching cell on the board and the game starts.
 At each turn player, would have three actions that can be performed - 
@@ -65,7 +65,7 @@ At each turn player, would have three actions that can be performed -
  2. Throw a dead tile 
  3. End the turn
 
-During the play:
+####During the play:####
 
 When a player places a tile - 
  
@@ -80,7 +80,7 @@ While merging the hotel all the stock holders of the dissolving hotel should be 
 They can choose one, two or all the options.
 * A hotel can't be merged if it’s a safe corporation - a corporation with 11 or more tiles.
 
-During the merger:
+####During the merger:####
 
 *	The players with the most and second most stockholders are the majority and the minority stockholders who get 	majority and 		minority stock bonuses as below -
 	a)	Maintain a majority and minority bonus amounts chart.
@@ -89,33 +89,33 @@ During the merger:
 *	If there is a tie for minority stockholder, split the minority bonus among the tied members.
 *	Stockholders in the surviving corporation get no bonus but their stock price grows higher as the hotel grows.
  
-Multiple mergers:
+####Multiple mergers:####
 
 *	It is possible that one tile merges more than two hotels. The larger corporation survives.
 *	Any ties would be broken by merge maker.
 *	The bonuses are catered to stockholders for each defunct corporation - larger to smaller.
   
-Buying Stocks:
+####Buying Stocks:####
 
 *	After placing the tile the player may buy the stock in any active corporation (25 stocks max for each corp.).
 *	He can buy up to 3 stocks in one corp. or 2 in one corporation and 1 in the other or all three in different 	corporations or 	less than 3 in any combinations or not buy at all.
 *	Stock price depends on name of the corporation and number of tiles (maintain a chart with the rates).
 
-Drawing a tile:
+####Drawing a tile:####
 
 * Each time a player plays a tile, he draws a tile from the remaining tiles.
 *	In each turn, the player can discard any dead tiles (ones that merge two safe corporations).
 *	Tiles that form 8th corporation can't be traded in.
 	The drawn tiles are placed on the board by the players during their turn based on the strategy they follow.
 
-Ending the game:
+####Ending the game:####
 
 The game ends in any of the following situations. 
 *	One player during his turn claims all active corporations are safe or that 1 corporation has 41 tiles.
 *	A player doesn't have to end the game if he feels there is advantage in continuing playing.
 *	When all the tiles are done the game ends automatically or any of the player has all invalid tiles then the game ends.
 
-Announcing the winner:
+####Announcing the winner:####
 
 	Majority and minority shareholders' bonuses are given out and all the stocks in active corporations are sold to the stock bank. Player with the maximum money wins.
 
