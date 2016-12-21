@@ -90,4 +90,8 @@ public class StrategyPlayer {
 		return shares;
 	}
 
+	public String getStrategyName() {
+		return strategyName;
+	}
+
 }

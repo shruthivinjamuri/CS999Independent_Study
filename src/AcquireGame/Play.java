@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Play {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws GameException {
 		Player player1 = new Player("Shruthi");
 		Player player2 = new Player("Rakesh");
 		Player player3 = new Player("Rasher");

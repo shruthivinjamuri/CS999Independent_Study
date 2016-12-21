@@ -21,6 +21,31 @@ public class Board {
 		this.activeHotels.addAll(activeHotels);
 		this.shares.putAll(shares);
 	}
+	
+	public void setTileOnBoard(Tile tile) {
+		this.board[tile.getRow()][tile.getCol()].setIsAvailable(false);
+	}
+	
+	public boolean isTileOnBoard(Tile tile) {
+		return !board[tile.getRow()][tile.getCol()].isAvailable();
+	}
+	
+	public Double getShareValue(String hotel, Integer numOfShares) {
+		for(Hotel activeHotel: activeHotels) {
+			if(activeHotel.getHotelName().equals(hotel)) {
+				return activeHotel.totalValueOfShares(numOfShares);
+			}
+		}
+		return 0.0;
+	}
+	
+	public void decrementShares(int noOfShares, String hotelName) {
+		for(Hotel activeHotel: activeHotels) {
+			if(activeHotel.getHotelName().equals(hotelName)) {
+				activeHotel.decrementSharesAvailable(noOfShares);
+			}
+		}
+	}
 
 	private void initializeBoard() {
 		for (int rowIdx = 0; rowIdx < AcquireStatistics.rows; rowIdx++) {
@@ -116,5 +141,26 @@ public class Board {
 	public Map<String, Integer> getShares() {
 		return shares;
 	}
-
+	
+	public int getRemSharesAvailable(String hotelName) {
+		for(Hotel hotel: activeHotels) {
+			if(hotelName.equals(hotel.getHotelName())) {
+				return hotel.getSharesAvailable();
+			}
+		}
+		return AcquireStatistics.sharesPerHotel;
+	}
+	
+	public Hotel getHotelByName(String hotelName) {
+		for(Hotel hotel: activeHotels) {
+			if(hotelName.equals(hotel.getHotelName())) {
+				return hotel;
+			}
+		}
+		return null;
+	}
+	
+	public void addHotel(Hotel hotel) {
+		activeHotels.add(hotel);
+	}
 }

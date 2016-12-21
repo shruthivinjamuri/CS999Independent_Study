@@ -1,8 +1,8 @@
-package Implementations;
+package graphImplementations;
 
 import java.util.List;
 
-import interfaces.IEdge;
+import graphInterfaces.IEdge;
 
 public class Run {
 

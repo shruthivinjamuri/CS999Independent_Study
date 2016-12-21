@@ -20,9 +20,17 @@ public class Board {
 	public void initializeBoard() {
 		for (int rowIdx = 0; rowIdx < AcquireStatistics.rows; rowIdx++) {
 			for (int colIdx = 0; colIdx < AcquireStatistics.columns; colIdx++) {
-				board[rowIdx][colIdx] = new Cell(AcquireStatistics.rowMapping().get(rowIdx + 1), colIdx + 1);
+				try {
+					board[rowIdx][colIdx] = new Cell(AcquireStatistics.rowMapping().get(rowIdx + 1), colIdx + 1);
+				} catch (GameException e) {
+					e.printStackTrace();
+				}
 			}
-		}
+		}	
+	}
+	
+	public void addHotel(Hotel hotel) {
+		activeHotels.add(hotel);
 	}
 
 	public void markCell(Cell Tile) {
@@ -203,7 +211,7 @@ public class Board {
 		return remainingHotels;
 	}
 
-	public void findHotel(String hotelName, Cell tile) {
+	public void findHotel(String hotelName, Cell tile) throws GameException {
 		Hotel newHotel = new Hotel(hotelName);
 		List<Cell> adjTiles = adjascentTiles(tile);
 		newHotel.expandHotel(tile);

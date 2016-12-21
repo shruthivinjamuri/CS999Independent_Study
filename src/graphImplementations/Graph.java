@@ -1,4 +1,4 @@
-package Implementations;
+package graphImplementations;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,10 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import interfaces.IEdge;
-import interfaces.IGraph;
-import interfaces.INode;
-import interfaces.IPath;
+import graphInterfaces.IEdge;
+import graphInterfaces.IGraph;
+import graphInterfaces.INode;
+import graphInterfaces.IPath;
 
 public class Graph implements IGraph {
 	private String graphName;

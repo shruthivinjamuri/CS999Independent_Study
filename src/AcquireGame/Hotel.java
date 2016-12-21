@@ -8,14 +8,23 @@ public class Hotel {
 	private Set<Cell> hotelTiles;
 	private int sharesAvailable;
 
-	public Hotel(String hotelName) {
-		this.hotelName = hotelName;
+	public Hotel(String hotelName) throws GameException {
+		setName(hotelName);
 		this.hotelTiles = new HashSet<Cell>();
 		this.sharesAvailable = AcquireStatistics.sharesPerHotel;
 	}
 
 	public int getHotelSize() {
 		return this.hotelTiles.size();
+	}
+	
+	public boolean setName(String name) throws GameException {
+		if(AcquireStatistics.isValidHotelName(name)){
+			this.hotelName = name;
+			return true;
+		}
+		else
+			throw new GameException("Invalid hotel name");
 	}
 
 	public void expandHotel(Cell newTile) {
@@ -68,6 +77,18 @@ public class Hotel {
 	
 	public boolean defunctHotel() {
 		return hotelTiles.removeAll(hotelTiles);
+	}
+	
+	public boolean equals(Hotel hotel){
+		if (this.hotelName.equals(hotel.hotelName) && this.hotelTiles.size() == hotel.getHotelSize()) {
+			for(Cell t : this.hotelTiles){
+				if(!hotel.isInHotel(t)){
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	public String getHotelTag() {

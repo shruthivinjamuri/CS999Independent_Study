@@ -1,7 +1,7 @@
-package Implementations;
+package graphImplementations;
 
-import interfaces.IEdge;
-import interfaces.INode;
+import graphInterfaces.IEdge;
+import graphInterfaces.INode;
 
 public class Edge implements IEdge{
     

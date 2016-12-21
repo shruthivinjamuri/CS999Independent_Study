@@ -43,7 +43,7 @@ public class Game {
 		return board;
 	}
 
-	public void startGame() {
+	public void startGame() throws GameException {
 		while (!endOfGame()) {
 			for (Player player : players) {
 				System.out.println("Player Name: " + player.getPlayerName());
@@ -182,12 +182,12 @@ public class Game {
 		}
 	}
 
-	private void buyShares(Player player) {
+	public boolean buyShares(Player player) {
 		int shares = AcquireStatistics.maxSharesToBuy;
 		int turns = 3;
 		while (turns > 0 && shares > 0 && minFundsAvailable(player)) {
 			if (!(adequateSharesAvailable(shares)))
-				return;
+				return false;
 			Hotel hotel = player.pickRandomHotel(board.getActiveHotels());
 			int sharesInThisHotel = new Random().nextInt(shares) + 1;
 			System.out.println(sharesInThisHotel);
@@ -203,6 +203,7 @@ public class Game {
 			}
 			turns--;
 		}
+		return true;
 
 	}
 

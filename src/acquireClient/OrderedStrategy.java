@@ -16,6 +16,7 @@ public class OrderedStrategy implements IStrategy {
 	public String pickTileToPlace(List<Tile> tiles) {
 		Tile[] playerTiles = new Tile[tiles.size()];
 		Arrays.sort(tiles.toArray(playerTiles));
+		tileToPlace = tiles.get(0);
 		return "<place row=" + playerTiles[0].getRow() + " column=" + playerTiles[0].getCol() + ">  </place>";
 	}
 

@@ -7,8 +7,8 @@ public class Cell implements Comparable<Cell>{
 	private boolean isTileAvailable;
 	private boolean isDeadTile;
 
-	public Cell(char row, int col) {
-		this.row = row;
+	public Cell(char row, int col) throws GameException {
+		setRow(row);
 		this.col = col;
 		this.isMarked = false;
 		this.isTileAvailable = true;
@@ -19,7 +19,7 @@ public class Cell implements Comparable<Cell>{
 			return row +""+ col;
 	}
 
-	public boolean equals(Cell other) {
+	public boolean equals(Cell other) throws GameException {
 		return this.getRow() == other.getRow() && this.getCol() == other.getCol();
 	}
 
@@ -37,6 +37,22 @@ public class Cell implements Comparable<Cell>{
 
 	public int getCol() {
 		return col - 1;
+	}
+	
+	public void setRow(char row) throws GameException {
+		if(AcquireStatistics.isValidRow(row)) {
+			this.row = row;
+		} else {
+			throw new GameException("Invalid Row");
+		}
+	}
+	
+	public void setCol(int col) throws GameException {
+		if(AcquireStatistics.isValidCol(col)) {
+			this.col = col;
+		} else {
+			throw new GameException("Invalid col");
+		}
 	}
 
 	public boolean isTileAvailable() {

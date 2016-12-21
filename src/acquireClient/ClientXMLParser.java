@@ -47,6 +47,11 @@ public class ClientXMLParser {
 		List<Tile> tilesOnBoard = new ArrayList<Tile>();
 		Set<Hotel> activeHotels = new HashSet<Hotel>();
 		Map<String, Integer> shares = new HashMap<String, Integer>();
+		List<Tile> tilesOfPlayer = new ArrayList<Tile>();
+		Map<String, Integer> playerShares = new HashMap<>();
+		Set<Tile> tilesInHotel = new HashSet<Tile>();
+		StrategyPlayer currentPlayer = null;
+		Hotel currentHotel = null;
 		String returnString = "";
 
 		// go through the input
@@ -55,12 +60,6 @@ public class ClientXMLParser {
 			XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(new StringReader(input));
 
 			while (xmlEventReader.hasNext()) {
-				Set<Tile> tilesInHotel = new HashSet<Tile>();
-				StrategyPlayer currentPlayer = null;
-				Hotel currentHotel = null;
-				List<Tile> tilesOfPlayer = new ArrayList<Tile>();
-				Map<String, Integer> playerShares = new HashMap<>();
-
 				XMLEvent xmlEvent = xmlEventReader.nextEvent();
 
 				if (xmlEvent.isStartElement()) {
@@ -133,18 +132,17 @@ public class ClientXMLParser {
 						if (hotelNameAttr != null && shareCountAttr != null) {
 							if (isPlayerReceived) {
 								playerShares.put(hotelNameAttr.getValue(), Integer.parseInt(shareCountAttr.getValue()));
+							} else if(isBoardReceived) {
+								shares.put(hotelNameAttr.getValue(), Integer.parseInt(shareCountAttr.getValue()));
 							}
-						}
-						if (hotelNameAttr != null && shareCountAttr != null) {
-							shares.put(hotelNameAttr.getValue(), Integer.parseInt(shareCountAttr.getValue()));
 						}
 					}
 
 					// player tag
 					else if (startElement.getName().getLocalPart().equals("player")) {
 						isPlayerReceived = true;
-						Attribute playerNameAttr = startElement.getAttributeByName(new QName("count"));
-						Attribute cashAttr = startElement.getAttributeByName(new QName("from"));
+						Attribute playerNameAttr = startElement.getAttributeByName(new QName("name"));
+						Attribute cashAttr = startElement.getAttributeByName(new QName("cash"));
 
 						if (playerNameAttr != null && cashAttr != null) {
 							for (StrategyPlayer player : playerAdmin.getPlayers()) {
@@ -170,10 +168,13 @@ public class ClientXMLParser {
 						currentHotel.addTiles(tilesInHotel);
 						activeHotels.add(currentHotel);
 						isHotelReceived = false;
+						tilesInHotel = new HashSet<Tile>();
 					} else if (endElement.getName().getLocalPart().equals("player")) {
 						currentPlayer.setTiles(tilesOfPlayer);
 						currentPlayer.setShares(playerShares);
 						isPlayerReceived = false;
+						tilesOfPlayer = new ArrayList<Tile>();
+						playerShares = new HashMap<>();
 					} else if (endElement.getName().getLocalPart().equals("clientState")) {
 						clientState = new Board(tilesOnBoard, activeHotels, shares);
 						playerAdmin.setCurrentClientState(clientState);

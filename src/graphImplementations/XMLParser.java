@@ -1,4 +1,4 @@
-package Implementations;
+package graphImplementations;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class XMLParser {
 				+ "<edge from=\"D\" to=\"A\" cost=\"2\"/><edge from=\"D\" to=\"B\" cost=\"1\"/>"
 				+ "<edge from=\"D\" to=\"C\" cost=\"2\"/><edge from=\"A\" to=\"C\" cost=\"9\"/>"
 				+ "<edge from=\"C\" to=\"E\" cost=\"8\"/><edge from=\"E\" to=\"A\" cost=\"7\"/>"
-				+ "</graph><path graph=\"graph1\" from=\"C\" to=\"C\" /></graphProject>");
+				+ "</graph><path graph=\"graph1\" from=\"C\" to=\"A\" /></graphProject>");
 		System.out.println(ans);
 	}
 	
@@ -113,7 +113,7 @@ public class XMLParser {
 		try{
 			reader = xmlInputFactory.createXMLStreamReader(new StringReader(xml));
 			SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = factory.newSchema(new File(System.getProperty("user.dir")+"\\src\\Implementations\\schema.xsd"));
+			Schema schema = factory.newSchema(new File(System.getProperty("user.dir")+"\\src\\graphImplementations\\schema.xsd"));
 			Validator validator = schema.newValidator();
 			validator.validate(new StAXSource(reader));		
 	} catch (XMLStreamException | SAXException | IOException e){

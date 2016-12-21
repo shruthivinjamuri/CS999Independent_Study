@@ -1,9 +1,9 @@
-package Implementations;
+package graphImplementations;
 
 import java.util.HashMap;
 
-import interfaces.IGraph;
-import interfaces.IGraphLibrary;
+import graphInterfaces.IGraph;
+import graphInterfaces.IGraphLibrary;
 
 public class GraphLibrary implements IGraphLibrary {
 	private HashMap<String, IGraph> graphs = new HashMap<>();

@@ -1,11 +1,11 @@
-package Implementations;
+package graphImplementations;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import interfaces.IEdge;
-import interfaces.INode;
-import interfaces.IPath;
+import graphInterfaces.IEdge;
+import graphInterfaces.INode;
+import graphInterfaces.IPath;
 
 public class Path implements IPath {
        

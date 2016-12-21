@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import AcquireGame.AcquireStatistics;
 import AcquireGame.Board;
 import AcquireGame.Cell;
+import AcquireGame.GameException;
 import AcquireGame.Hotel;
 import AcquireGame.AcquireStatistics.TilePlacementType;
 
@@ -80,7 +81,7 @@ public class StrategyGame {
 		}
 	}
 
-	public void findingHotel(Cell tile, String hotelName) {
+	public void findingHotel(Cell tile, String hotelName) throws GameException {
 		board.findHotel(hotelName, tile);
 	}
 

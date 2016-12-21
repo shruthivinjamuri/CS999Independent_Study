@@ -1,11 +1,11 @@
-package Implementations;
+package graphImplementations;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import interfaces.IEdge;
-import interfaces.INode;
+import graphInterfaces.IEdge;
+import graphInterfaces.INode;
 
 public class Node implements INode{
        

@@ -36,48 +36,26 @@
 					<xs:complexType>
 						<xs:simpleContent>
 							<xs:extension base="xs:string">
-								<xs:attribute type="xs:string" name="column" use="required" />
 								<xs:attribute type="xs:string" name="row" use="required" />
+								<xs:attribute type="xs:string" name="column" use="required" />
+								<xs:attribute type="xs:string" name="hotel" use="optional" />
 							</xs:extension>
 						</xs:simpleContent>
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
 			<xs:sequence>
-				<xs:element name="hotel" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="share" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:simpleContent>
-							<xs:sequence>
-								<xs:element name="tile" minOccurs="0" maxOccurs="unbounded">
-									<xs:complexType>
-										<xs:simpleContent>
-											<xs:extension base="xs:string">
-												<xs:attribute type="xs:string" name="column"
-													use="required" />
-												<xs:attribute type="xs:string" name="row" use="required" />
-											</xs:extension>
-										</xs:simpleContent>
-									</xs:complexType>
-								</xs:element>
-							</xs:sequence>
-							<xs:attribute type="xs:string" name="name" use="required" />
-
+							<xs:extension base="xs:string">
+								<xs:attribute type="xs:string" name="name" use="required" />
+								<xs:attribute type="xs:string" name="count" use="required" />
+							</xs:extension>
+						</xs:simpleContent>
 					</xs:complexType>
 				</xs:element>
+			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:sequence>
-		<xs:element name="share" minOccurs="0" maxOccurs="unbounded">
-			<xs:complexType>
-				<xs:simpleContent>
-					<xs:extension base="xs:string">
-						<xs:attribute type="xs:string" name="name" use="required" />
-						<xs:attribute type="xs:string" name="count" use="required" />
-					</xs:extension>
-				</xs:simpleContent>
-			</xs:complexType>
-		</xs:element>
-	</xs:sequence>
-</xs:complexType>
-</xs:element>
 </xs:schema>

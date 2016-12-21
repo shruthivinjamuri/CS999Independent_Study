@@ -1,4 +1,4 @@
-package interfaces;
+package graphInterfaces;
 
 import java.util.List;
 

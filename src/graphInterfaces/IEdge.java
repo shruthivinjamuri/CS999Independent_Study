@@ -1,4 +1,4 @@
-package interfaces;
+package graphInterfaces;
 
 public interface IEdge extends Comparable<IEdge>{
     public Double getCost();

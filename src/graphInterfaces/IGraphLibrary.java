@@ -1,4 +1,4 @@
-package interfaces;
+package graphInterfaces;
 
 public interface IGraphLibrary {
 	public void createGraph(String graphName, Double costInterval); 

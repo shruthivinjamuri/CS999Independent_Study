@@ -1,4 +1,4 @@
-package Implementations;
+package graphImplementations;
 
 import java.io.BufferedReader;
 import java.io.IOException;
