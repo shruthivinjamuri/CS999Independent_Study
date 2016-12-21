@@ -21,10 +21,10 @@ Design and implementation:
 To implement the OO Concepts discussed in the introduction I have used Java programming language and coded on Eclipse IDE. I have designed interfaces first to reflect the skeleton of the implementation. Later, written the classes for all the interfaces with full implementation. Client and server XML parsers are written as StAX parsers and used ‘http://www.w3.org/2001/XMLSchema’ to validate xsd schema.
 
 The input tag for the parser from the client looks as follows:
-<graphProject><graph name=\"graph1\" costInterval=\"45\">" + "<edge from=\"A\" to=\"B\" cost=\"6\"></edge><edge from=\"A\" to=\"D\" cost=\"3\"/>" + "<edge from=\"D\" to=\"A\" cost=\"2\"/><edge from=\"D\" to=\"B\" cost=\"1\"/>" + "<edge from=\"D\" to=\"C\" cost=\"2\"/><edge from=\"A\" to=\"C\" cost=\"9\"/>" + "<edge from=\"C\" to=\"E\" cost=\"8\"/><edge from=\"E\" to=\"A\" cost=\"7\"/>" + "</graph><path graph=\"graph1\" from=\"C\" to=\"A\" /></graphProject>
+&lt;graphProject>&lt;graph name=\"graph1\" costInterval=\"45\">" + "&lt;edge from=\"A\" to=\"B\" cost=\"6\">&lt;/edge>&lt;edge from=\"A\" to=\"D\" cost=\"3\"/>" + "&lt;edge from=\"D\" to=\"A\" cost=\"2\"/>&lt;edge from=\"D\" to=\"B\" cost=\"1\"/>" + "&lt;edge from=\"D\" to=\"C\" cost=\"2\"/>&lt;edge from=\"A\" to=\"C\" cost=\"9\"/>" + "&lt;edge from=\"C\" to=\"E\" cost=\"8\"/>&lt;edge from=\"E\" to=\"A\" cost=\"7\"/>" + "&lt;/graph>&lt;path graph=\"graph1\" from=\"C\" to=\"A\" />&lt;/graphProject>
 
 Output is given as:
-<path cost=15.0><edge from=C to=E cost=8.00 /> <edge from=E to=A cost=7.00 /> </path>
+&lt;path cost=15.0>&lt;edge from=C to=E cost=8.00 /> &lt;edge from=E to=A cost=7.00 /> &lt;/path>
 
 Acquire Board Game
 -------------------
@@ -39,6 +39,7 @@ To implement acquire game I have selected Java programming language and code on 
 The challenging part of the acquire board game implementation is conforming to its huge list of game rules and designing the flow following all these rules. The overall rules and design flow for acquire game is as follows:
 
 Before starting the game:
+
 The following entities should be present -
 1. Acquire board - 12*9 size with rows 1 - 12 and columns A - I each cell named as 1A, 10I etc.
 2. Tiles matching the names on the cells of the board.
@@ -47,6 +48,7 @@ The following entities should be present -
 5. 1-6 players to play the game.
 
 At the start of the game:
+
 The board should be empty (all the cells unmarked).
 Each player should have the following - 
 1. 6 Tiles (hidden from other players)
@@ -55,6 +57,7 @@ Each player should have the following -
    Choose the order in which players play the game - It could be based on some strategy as in players ranked in        	the order of closeness to 1A when placing the 1st tile or in a pre-decided order.
 
 Game Flow:
+
 When the game starts each player places on a tile on matching cell on the board and the game starts.
 At each turn player, would have three actions that can be performed - 
  1. Purchase a stock
@@ -62,6 +65,7 @@ At each turn player, would have three actions that can be performed -
  3. End the turn
 
 During the play:
+
 When a player places a tile - 
  
 •	If the tile is adjacent (horizontal or vertical) to a single marked cell, then he can pick a hotel from the existing 7 hotels. If the seven hotels already exist on the board then adjacent tile move is Invalid.
@@ -76,6 +80,7 @@ While merging the hotel all the stock holders of the dissolving hotel should be 
 	•	A hotel can't be merged if it’s a safe corporation - a corporation with 11 or more tiles.
 
 During the merger:
+
 •	The players with the most and second most stockholders are the majority and the minority stockholders who get 	majority and minority stock bonuses as below -
 	a)	Maintain a majority and minority bonus amounts chart.
 	b)	If only 1 person owns the shares in the defunct corporation that person gets both the bonuses.
@@ -84,27 +89,31 @@ During the merger:
 •	Stockholders in the surviving corporation get no bonus but their stock price grows higher as the hotel grows.
  
 Multiple mergers:
+
 •	It is possible that one tile merges more than two hotels. The larger corporation survives.
 •	Any ties would be broken by merge maker.
 •	The bonuses are catered to stockholders for each defunct corporation - larger to smaller.
   
 Buying Stocks:
+
 •	After placing the tile the player may buy the stock in any active corporation (25 stocks max for each corp.).
 •	He can buy up to 3 stocks in one corp. or 2 in one corporation and 1 in the other or all three in different 	corporations or less than 3 in any combinations or not buy at all.
 •	Stock price depends on name of the corporation and number of tiles (maintain a chart with the rates).
 
 Drawing a tile:
+
 •	Each time a player plays a tile, he draws a tile from the remaining tiles.
 •	In each turn, the player can discard any dead tiles (ones that merge two safe corporations).
 •	Tiles that form 8th corporation can't be traded in.
 	The drawn tiles are placed on the board by the players during their turn based on the strategy they follow.
 
 Ending the game:
+
 The game ends in any of the following situations. 
 •	One player during his turn claims all active corporations are safe or that 1 corporation has 41 tiles.
 •	A player doesn't have to end the game if he feels there is advantage in continuing playing.
-•	When all the tiles are done the game ends automatically or any of the player has all invalid tiles then the 	game ends.
+•	When all the tiles are done the game ends automatically or any of the player has all invalid tiles then the game ends.
 
-Announcing the winner: 
-	Majority and minority shareholders' bonuses are given out and all the stocks in active corporations are sold 	to the stock bank. Player with the maximum money wins.
+Announcing the winner:
+	Majority and minority shareholders' bonuses are given out and all the stocks in active corporations are sold to the stock bank. Player with the maximum money wins.
 
